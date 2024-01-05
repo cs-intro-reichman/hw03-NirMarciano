@@ -11,7 +11,7 @@ public class LoanCalc {
      * Expects to get three command-line arguments: sum of the loan (double),
      * interest rate (double, as a percentage), and number of payments (int).  
      */
-	public static void main(String[] args) {		
+	public static void main (String[] args) {		
 		// Gets the loan data
 		double loan = Double.parseDouble(args[0]);
 		double rate = Double.parseDouble(args[1]);
@@ -39,8 +39,16 @@ public class LoanCalc {
 	*/
 	// Side effect: modifies the class variable iterationCounter.
     public static double bruteForceSolver(double loan, double rate, int n, double epsilon) {  
-    	// Replace the following statement with your code
-    	return 0;
+    	
+		double g = loan / n;
+		iterationCounter = 0;
+
+		while(endBalance(loan, rate, n, g) >= epsilon) {
+			g += epsilon;
+			iterationCounter++;
+		}
+
+    	return g;
     }
     
     /**
@@ -51,8 +59,21 @@ public class LoanCalc {
 	*/
 	// Side effect: modifies the class variable iterationCounter.
     public static double bisectionSolver(double loan, double rate, int n, double epsilon) {  
-    	// Replace the following statement with your code
-    	return 0;
+
+			double L = loan / n;
+			double H = loan;
+			double g = (H + L) / 2;
+			iterationCounter = 0;
+
+			while(H - L >= epsilon) {
+				if(endBalance(loan, rate, n, g) * endBalance(loan, rate, n, L) > 0)
+					L = g;
+					else
+						H = g;
+				g = (H + L) / 2;
+				iterationCounter++;
+			}
+		return g;
     }
 	
 	/**
@@ -60,7 +81,11 @@ public class LoanCalc {
 	* interest rate (as a percentage), the number of periods (n), and the periodical payment.
 	*/
 	private static double endBalance(double loan, double rate, int n, double payment) {
-		// Replace the following statement with your code
-    	return 0;
+
+		double k = loan;
+		for (int i = 0; i < n; i++) {
+			k = ((k - payment) * ((100 +rate) / 100));
+		}
+    	return k;
 	}
 }
